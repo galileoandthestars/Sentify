@@ -2,6 +2,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import {useState, useEffect} from "react";
+import { Link } from 'react-router-dom';
 
 export const NavBar = () => {
     /*amanagement about which link we are at the moment using useState hook */
@@ -28,7 +29,7 @@ export const NavBar = () => {
   return (
     <Navbar  expand="lg" className= {scrolled ? "scrolled" : ""}>
       <Container fluid>
-        <Navbar.Brand href="#home">Sentify</Navbar.Brand>
+        <Navbar.Brand> <Link to="/">Sentify</Link></Navbar.Brand>
         {/*Toggler for mobile development. Navbars renders as collapse on mobile phones*/}
         <Navbar.Toggle aria-controls="basic-navbar-nav"> 
          <span className = "navbar-toggler-icon"></span> </Navbar.Toggle>
@@ -41,7 +42,7 @@ export const NavBar = () => {
             <Nav.Link href="#contact" className={activeLink === 'contact' ? 'active navbar-link' : 'navbar-link'} onClick= {() => onUpdateActiveLink('contact')}>Contact Us</Nav.Link>
           </Nav>
           <span className='navbar-text'>
-          <button className="login-button" onClick={()=> console.log('connect')}><span>Log In</span></button>
+          <Link className="login-button" to="/login"><span>Log In</span></Link>
           </span>
         </Navbar.Collapse>
       </Container>
