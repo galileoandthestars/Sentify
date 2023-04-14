@@ -4,7 +4,7 @@ import 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Router, Route } from 'react-router-dom';
 import {Home} from './Pages/Home';
-
+import { NavBar } from './components/NavBar';
 
 function App() {
   return (
