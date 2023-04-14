@@ -24,7 +24,7 @@
 }
 
 /*Default CSS*/
-*, .home{
+*{
   margin:0;
   padding: 0;
   box-sizing: border-box;
@@ -507,12 +507,12 @@ nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon{
   }
 }
 
-label {
+.login-label {
   text-align: left;
   padding: 0.25rem 0;
 }
 
-input {
+.login-input {
   margin: 0.5rem 0;
   padding: 1rem;
   border: none;
@@ -536,7 +536,7 @@ input {
   border:none;
 }
 
-span{
+.login-span{
   font-size: 12px;
   padding:3px;
   text-align: left;
@@ -544,6 +544,6 @@ span{
   display: none;
 }
 
-input:invalid ~ span{
+input:invalid ~ .login-span{
   display: block;
 }

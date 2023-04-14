@@ -1,19 +1,24 @@
 import './App.css';
-import {Login} from './Pages/Login';
 import 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Router, Route } from 'react-router-dom';
-import {Home} from './Pages/Home';
+
 import { NavBar } from './components/NavBar';
+import {Banner} from './components/Banner'
+import {About} from './components/About';
+import {Features} from './components/Features';
+import {Creators} from './components/Creators';
+import {Contact} from './components/Contact';
 
 function App() {
   return (
 <div className="App">
-  <Router>
-      <Route exact path="/" component={Home} />
-      <Route path="/login" component={Login} />
-  </Router>
-   
+  <NavBar/>
+  <Banner/>
+  <About/>
+  <Features/>
+  <Creators/>
+  <Contact/>
+  
 </div>
   );
 }
