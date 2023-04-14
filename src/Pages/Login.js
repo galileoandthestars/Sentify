@@ -10,7 +10,7 @@ export const Login = (props) => {
     }
 
     return (
-        
+        <div className="login-page">
         <div className="auth-form-container">
             <h2>Login</h2>
             <form className="login-form" onSubmit={handleSubmit}>
@@ -21,6 +21,7 @@ export const Login = (props) => {
                 <button className="submit-btn" type="submit">Log In</button>
             </form>
             <button className="link-btn" onClick={() => props.onFormSwitch('register')}>Don't have an account? Register here.</button>
+        </div>
         </div>
     )
 }

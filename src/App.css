@@ -483,6 +483,7 @@ nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon{
 
 /*Login Form Styling*/
 .login-page, .register-page {
+  margin:0;
   text-align: center;
   display: flex;
   min-height: 100vh;
