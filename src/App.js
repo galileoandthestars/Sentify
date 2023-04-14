@@ -1,24 +1,20 @@
 import './App.css';
-import {NavBar} from './components/NavBar';
-import {Banner} from './components/Banner';
-import {About} from './components/About';
-import {Contact} from './components/Contact';
-import { Features } from './components/Features';
-import {Creators} from './components/Creators';
+import {Login} from './Pages/Login';
 import 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Router, Route } from 'react-router-dom';
+import {Home} from './Pages/Home';
+
 
 function App() {
   return (
-    <div className="App">
-      <NavBar />
-      {/*Routes and router */}
-      <Banner/>
-      <About />
-      <Features/>
-      <Creators />
-      <Contact/> 
-    </div>
+<div className="App">
+  <Router>
+      <Route exact path="/" component={Home} />
+      <Route path="/login" component={Login} />
+  </Router>
+   
+</div>
   );
 }
 export default App;
