@@ -2,9 +2,29 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Navbar } from "react-bootstrap";
 
-export const Login = (props) => {
+async function loginUser(credentials) {
+    return fetch("/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(credentials)
+    })
+        .then(data => data.json())
+}
+
+export const Login = ({ setToken }) => {
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
+
+    const handleSubmit = async e => {
+        e.preventDefault();
+        const token = await loginUser({
+            email,
+            pass
+        });
+        setToken(token);
+    }
 
     return (
         <div className="login-page">
@@ -13,7 +33,7 @@ export const Login = (props) => {
             </Navbar>
             <div className="auth-form-container">
                 <h2>Login</h2>
-                <form className="login-form" method="post">
+                <form className="login-form" onSubmit={handleSubmit}>
                     <label htmlFor="email" className="login-label">email</label>
                     <input value={email} className="login-input" onChange={(e) => setEmail(e.target.value)} placeholder="youremail@gmail.com" id="email" name="email" />
                     <label htmlFor="password" className="login-label">password</label>
