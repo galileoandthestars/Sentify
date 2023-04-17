@@ -1,6 +1,6 @@
 import os
 import jwt
-from flask import Flask
+from flask import Flask, redirect
 from flask_cors import CORS
 from flask_mysqldb import MySQL
 from hashlib import pbkdf2_hmac
@@ -74,9 +74,7 @@ def db_read(query, params=None):
 
 
 def generate_jwt_token(content):
-    encoded_content = jwt.encode(content, JWT_SECRET_KEY, algorithm="HS256")
-    token = str(encoded_content).split("'")[1]
-    return token
+    return jwt.encode(content, JWT_SECRET_KEY, algorithm="HS256")
 
 
 def validate_user(username, password):
@@ -101,11 +99,11 @@ def validate_user(username, password):
 authentication = Blueprint("authentication", __name__)
 
 
-@authentication.route("/register", methods=["POST"])
+@authentication.route("/register", methods=["POST", "GET"])
 def register_user():
-    username = request.json["username"]
-    user_password = request.json["password"]
-    user_confirm_password = request.json["confirm_password"]
+    username = request.form.get("username")
+    user_password = request.form.get("password")
+    user_confirm_password = request.form.get("confirmation_password")
 
     if user_password == user_confirm_password and validate_user_input(
         "authentication", username=username, password=user_password
@@ -119,7 +117,7 @@ def register_user():
         ):
             # Registration Successful
             # 201 = CREATED
-            return Response(status=201)
+            return redirect("http://localhost:3000/login")
         else:
             # Registration Failed
             # 409 = CONFLICT
@@ -132,8 +130,8 @@ def register_user():
 
 @authentication.route("/login", methods=["POST"])
 def login_user():
-    username = request.json["username"]
-    user_password = request.json["password"]
+    username = request.form.get("email")
+    user_password = request.form.get("password")
 
     user_token = validate_user(username, user_password)
 
