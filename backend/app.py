@@ -130,8 +130,8 @@ def register_user():
 
 @authentication.route("/login", methods=["POST"])
 def login_user():
-    username = request.form.get("email")
-    user_password = request.form.get("password")
+    username = request.json["email"]
+    user_password = request.json["pass"]
 
     user_token = validate_user(username, user_password)
 
@@ -139,7 +139,7 @@ def login_user():
         return jsonify({"jwt_token": user_token})
     else:
         # 401 = UNAUTHORIZED
-        Response(status=401)
+        return Response(status=401)
 
 
 app.register_blueprint(authentication, url_prefix="/api/auth")
