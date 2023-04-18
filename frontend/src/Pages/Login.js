@@ -1,19 +1,24 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Navbar } from "react-bootstrap";
+import useToken from '../components/useToken';
 
 async function loginUser(credentials) {
     return fetch("/login", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            'Accept': 'application/json'
         },
         body: JSON.stringify(credentials)
     })
-        .then(data => data.json())
+        .then((response) => response.json())
+        .then((messages) => { console.log(messages); });
 }
 
-export const Login = ({ setToken }) => {
+export const Login = () => {
+    const navigate = useNavigate();
+    const { setToken } = useToken();
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
 
@@ -24,6 +29,7 @@ export const Login = ({ setToken }) => {
             pass
         });
         setToken(token);
+        navigate("/dashboard");
     }
 
     return (
