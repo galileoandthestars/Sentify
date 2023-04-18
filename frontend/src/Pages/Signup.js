@@ -1,12 +1,37 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Navbar } from "react-bootstrap";
 
+async function registerUser(credentials) {
+    return fetch("/register", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(credentials)
+    })
+        .then((response) => response.json())
+        .then((messages) => { console.log(messages); });
+}
+
 export const SignUp = (props) => {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
     const [name, setName] = useState('');
     const [confPass, setConfPass] = useState('');
+
+    const handleSubmit = async e => {
+        e.preventDefault();
+        const throwaway = await registerUser({
+            email,
+            pass,
+            name,
+            confPass
+        });
+        navigate("/login");
+    }
 
     return (
         <div className="register-page">
@@ -15,7 +40,7 @@ export const SignUp = (props) => {
             </Navbar>
             <div className="auth-form-container">
                 <h2>Register</h2>
-                <form className="register-form" method="post">
+                <form className="register-form" onSubmit={handleSubmit}>
                     <label htmlFor="name" className="login-label">Full Name</label>
                     <input value={name} className="login-input" name="username" onChange={(e) => setName(e.target.value)} id="name" placeholder="Full Name" />
                     <span className="form-hint">Full name must include spaces!</span>
