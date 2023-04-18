@@ -3,10 +3,10 @@ import { Login } from "./Login";
 import useToken from "../components/useToken";
 
 export const Dashboard = () => {
-    const { token, setToken } = useToken();
+    const { token } = useToken();
 
     if (!token) {
-        return <Login setToken={setToken} />
+        return <Login />
     }
 
     return (
