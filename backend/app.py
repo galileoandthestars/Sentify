@@ -101,9 +101,9 @@ authentication = Blueprint("authentication", __name__)
 
 @authentication.route("/register", methods=["POST", "GET"])
 def register_user():
-    username = request.form.get("username")
-    user_password = request.form.get("password")
-    user_confirm_password = request.form.get("confirmation_password")
+    username = request.json["name"]
+    user_password = request.json["pass"]
+    user_confirm_password = request.json["confPass"]
 
     if user_password == user_confirm_password and validate_user_input(
         "authentication", username=username, password=user_password
@@ -117,7 +117,7 @@ def register_user():
         ):
             # Registration Successful
             # 201 = CREATED
-            return redirect("http://localhost:3000/login")
+            return jsonify({"username": username})
         else:
             # Registration Failed
             # 409 = CONFLICT
