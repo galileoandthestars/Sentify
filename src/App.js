@@ -1,14 +1,14 @@
 import './App.css';
 import 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Home} from './Pages/Home';
+import {Dashboard} from './Pages/Dashboard';
 
 
 
 function App() {
   return (
 <div className="App">
-  <Home/>
+  <Dashboard/>
 </div>
   );
 }
