@@ -33,8 +33,38 @@ export const CameraFeed = () =>{
 
         let ctx = photo.getContext('2d');
         ctx.drawImage(video, 0, 0, width, height);
+
+         // create data URL for the image
+         const dataURL = photo.toDataURL();
+
+         // store the image in local storage
+         localStorage.setItem('photo', dataURL);
+ 
+         if (localStorage.getItem('photo')) {
+             // Image data exists in localStorage
+             
+             const imageData = localStorage.getItem('photo');
+             console.log(imageData);
+             // Send image data to Flask API
+             const requestOptions = {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify({ imageData })
+             };
+             fetch('/api/send-image', requestOptions)
+               .then(response => response.json())
+               .then(data => console.log(data))
+               .catch(error => console.error(error));
+         } else {
+             // Image data does not exist in localStorage
+             console.log('no');
+         }
+
         setHasPhoto(true);
     }
+
+
+
 
     const closePhoto = () => {
         let photo = photoRef.current;
@@ -43,6 +73,8 @@ export const CameraFeed = () =>{
         ctx.clearRect(0, 0, photo.width, photo.height);
         
         setHasPhoto(false);
+
+        localStorage.clear();
     }
 
 
