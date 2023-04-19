@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import { Login } from "./Login";
 import useToken from "../components/useToken";
+import { DashBoardLayout } from '../components/DashBoardLayout';
+import { ProSidebarProvider } from 'react-pro-sidebar';
 
 export const Dashboard = () => {
     const { token } = useToken();
 
     if (!token) {
-        return <Login />
+        <Login />
     }
 
     return (
-        <h1>Welcome</h1>
+        <div className='dashboard-page'>
+            <ProSidebarProvider>
+                <DashBoardLayout />
+            </ProSidebarProvider>
+        </div>
     );
 }
