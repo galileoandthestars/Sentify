@@ -1,12 +1,15 @@
 import os
 import jwt
-from flask import Flask, redirect
-from flask_cors import CORS
+import cv2
+import base64
+from deepface import DeepFace
 from flask_mysqldb import MySQL
 from hashlib import pbkdf2_hmac
 from flask_mysqldb import MySQLdb
-from flask import Blueprint, request, Response, jsonify
+from flask import Flask, Blueprint, request, Response, jsonify
 from settings import MYSQL_DB, MYSQL_PASSWORD, MYSQL_USER, JWT_SECRET_KEY
+
+recog_emotion = ""
 
 app = Flask(__name__)
 
@@ -140,6 +143,31 @@ def login_user():
     else:
         # 401 = UNAUTHORIZED
         return Response(status=401)
+
+
+@authentication.route("/send-image", methods=['POST', 'GET'])
+def receive_image():
+    imageData = request.json.get('imageData')
+    splitData = imageData.split(',')
+    imageData = splitData[1].replace(' ', '+')
+    imageData = base64.b64decode(imageData)
+    # Save the image data as a file
+    with open('image.png', 'wb') as f:
+        f.write(imageData)
+
+    imageData = cv2.imread("./image.png")
+
+    result = DeepFace.analyze(
+        imageData, actions=['emotion'], enforce_detection=False)
+
+    recog_emotion = result['dominant_emotion']
+
+    return jsonify({'status': 'success'})
+
+
+@authentication.route("/get-emotion")
+def get_emotion():
+    return recog_emotion
 
 
 app.register_blueprint(authentication, url_prefix="/api/auth")
