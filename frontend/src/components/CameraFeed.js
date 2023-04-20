@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 
-export const CameraFeed = () => {
+/*gets the prop from parent component */
+export const CameraFeed = ({ onPhotoData }) => {
     const videoRef = useRef(null);
     const photoRef = useRef(null);
 
@@ -51,7 +52,11 @@ export const CameraFeed = () => {
             };
             fetch('/send-image', requestOptions)
                 .then(response => response.json())
-                .then(data => console.log(data))
+                .then(data => {
+                    console.log(data)
+                    /*sets the props data with the handler function */
+                    onPhotoData(data.emotion, data.status);
+                })
                 .catch(error => console.error(error));
         } else {
             // Image data does not exist in localStorage
