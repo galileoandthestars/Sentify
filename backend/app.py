@@ -9,8 +9,6 @@ from flask_mysqldb import MySQLdb
 from flask import Flask, Blueprint, request, Response, jsonify
 from settings import MYSQL_DB, MYSQL_PASSWORD, MYSQL_USER, JWT_SECRET_KEY
 
-recog_emotion = ""
-
 app = Flask(__name__)
 
 app.config["MYSQL_USER"] = MYSQL_USER
@@ -162,12 +160,7 @@ def receive_image():
 
     recog_emotion = result['dominant_emotion']
 
-    return jsonify({'status': 'success'})
-
-
-@authentication.route("/get-emotion")
-def get_emotion():
-    return recog_emotion
+    return jsonify({'emotion': recog_emotion, 'status': 'success'})
 
 
 app.register_blueprint(authentication, url_prefix="/api/auth")
