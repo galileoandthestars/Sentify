@@ -2,6 +2,7 @@ import os
 import jwt
 import cv2
 import base64
+import numpy as np
 from deepface import DeepFace
 from flask_mysqldb import MySQL
 from hashlib import pbkdf2_hmac
@@ -97,6 +98,21 @@ def validate_user(username, password):
         return False
 
 
+def fetch_song(emotion):
+    result = db_read(
+        """SELECT s.songId, m.MoodName FROM song s, song_mood sm, mood m WHERE s.songId=sm.songID AND m.MoodId=sm.MoodID"""
+    )
+    songs = [song for song in result if song["MoodName"] == emotion]
+    index = np.random.randint(len(songs) - 1)
+    selectedSong = songs[index]["songId"]
+
+    songURL = db_read(
+        "Select s.songURL from Song s WHERE s.songId = " + str(selectedSong)
+    )
+    print(songURL)
+    return songURL[0]["songURL"]
+
+
 authentication = Blueprint("authentication", __name__)
 
 
@@ -161,6 +177,12 @@ def receive_image():
     recog_emotion = result['dominant_emotion']
 
     return jsonify({'emotion': recog_emotion, 'status': 'success'})
+
+
+@authentication.route("/recommend-song", methods=['POST'])
+def recommend_song():
+    song_url = fetch_song(request.json.get('emotion'))
+    return jsonify({"song-url": song_url})
 
 
 app.register_blueprint(authentication, url_prefix="/api/auth")
