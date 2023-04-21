@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CameraFeed } from './CameraFeed';
 
-export const PredictionLayout = () => {
+export const PredictionLayout = ({ hasEmotion }) => {
     const [emotion, setEmotion] = useState('')
     const [icon, setIcon] = useState('');
     const [emotionClass, setEmotionClass] = useState('');
@@ -41,6 +41,8 @@ export const PredictionLayout = () => {
         else {
             console.log('Empty emotion value');
         }
+
+        hasEmotion(emotion);
     }
 
     return (
