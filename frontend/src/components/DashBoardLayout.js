@@ -9,9 +9,41 @@ import { MdDashboard } from 'react-icons/md';
 import { CgProfile } from 'react-icons/cg';
 import { PredictionLayout } from './PredictionLayout';
 import { SongPlayer } from './SongPlayer';
+import { useState } from 'react';
 
 export const DashBoardLayout = () => {
     const { collapseSidebar } = useProSidebar();
+    const [state, setState] = useState({
+        emotion: false,
+        songUrl: ''
+    });
+    // const [hasEmotion, setEmotion] = useState(false);
+    // const [songURL, setSongURL] = useState("");
+
+    // let songURL = "";
+
+    const setHasEmotion = async (emotion) => {
+        const song_url = await fetchSong(emotion);
+        console.log(song_url);
+        setState({ ...state, songUrl: song_url["song-url"], emotion: true });
+    }
+
+    const fetchSong = async (emotion) => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ emotion })
+        };
+        return await fetch('/recommend-song', requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                return data;
+                // setSongURL(data);
+                // songURL = data;
+            })
+            .catch(error => console.error(error));
+    }
 
     return (
         <div style={{ display: 'flex', height: '100vh', width: '100vw', color: '#000000', fontFamily: 'monospace', border: 'none' }}>
@@ -45,8 +77,16 @@ export const DashBoardLayout = () => {
                 </h1>
 
                 <div className='dashboard-container'>
-                    <PredictionLayout />
-                    <SongPlayer />
+                    <PredictionLayout hasEmotion={setHasEmotion} />
+
+                    {!state.emotion &&
+                        <div className='before-song-player'>
+                            <p>Your recommended song will appear here after a picture is taken.</p>
+                        </div>
+                    }
+                    {state.emotion &&
+                        <SongPlayer songUrl={state.songUrl} />
+                    }
                 </div>
             </main >
         </div >
