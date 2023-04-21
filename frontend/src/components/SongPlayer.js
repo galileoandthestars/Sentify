@@ -1,10 +1,11 @@
 import React from "react";
 import { Spotify } from 'react-spotify-embed'
 
-export const SongPlayer = () => {
+export const SongPlayer = (songURL) => {
+    console.log(songURL);
     return (
         <div className="song-player">
-            <Spotify className="spotifyEmbedding" link="https://open.spotify.com/track/4OQq1bcP12GQQXJNupxqfR?si=e651071ef4d94ca6" />
+            <Spotify className="spotifyEmbedding" link={songURL['songUrl']} />
         </div>
     )
 }
