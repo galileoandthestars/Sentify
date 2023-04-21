@@ -23,11 +23,22 @@ export const CameraFeed = ({ onPhotoData }) => {
     }
 
     const takePhoto = () => {
-        const width = 414;
-        const height = width / (16 / 9);
+        // const width = 414;
+        // const height = width / (16 / 9);
 
         let video = videoRef.current;
         let photo = photoRef.current;
+
+        // Ratio of the video's intrisic dimensions
+        let videoRatio = video.videoWidth / video.videoHeight;
+        // The width and height of the video element
+        let width = video.offsetWidth, height = video.offsetHeight;
+        // The ratio of the element's width to its height
+        let elementRatio = width / height;
+        // If the video element is short and wide
+        if (elementRatio > videoRatio) width = height * videoRatio;
+        // It must be tall and thin, or exactly equal to the original ratio
+        else height = width / videoRatio;
 
         photo.width = width;
         photo.height = height;
@@ -83,7 +94,7 @@ export const CameraFeed = ({ onPhotoData }) => {
 
     return (
         <div className='camera-container'>
-            <div className={'camera'}>
+            <div className='camera'>
                 <video ref={videoRef}></video>
                 <button className='cameraFeed-btn' onClick={takePhoto}>SNAP!</button>
             </div>
