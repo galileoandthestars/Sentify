@@ -47,6 +47,7 @@ body {
 
 main {
   width: 100%;
+  background-color: #000000;
 }
 
 h1,
@@ -72,7 +73,7 @@ nav.navbar {
 
 nav.navbar.scrolled {
   padding: 0px 0px;
-  background-color: #121212;
+  background-color: #080808;
 }
 
 nav.navbar a.navbar-brand {
@@ -596,6 +597,30 @@ input:invalid~.login-span {
   background-color: #F1F1F1;
 }
 
+.sidebar-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  color: #fff;
+  font-family: 'Open Sans', sans-serif;
+  border: none;
+}
+
+.css-dip3t8 {
+  background-color: #111111 !important;
+
+}
+
+.css-1wvake5 {
+  border-right-width: 0px !important;
+  border-right-style: none !important;
+  border-color: transparent !important;
+}
+
+.ps-menu-button:hover {
+  color: black !important;
+}
+
 .camera {
   position: relative;
 }
@@ -611,7 +636,7 @@ input:invalid~.login-span {
   position: fixed;
   top: 0;
   left: 100%;
-  width: 480px;
+  /* width: 480px; */
   height: 270px;
   display: flex;
   align-items: center;
@@ -627,16 +652,17 @@ input:invalid~.login-span {
 }
 
 video {
-  width: 480px;
+  /* width: 480px; */
   height: 270px;
   padding: 0;
   margin: 0;
   border-radius: 15px;
 }
 
-.cameraFeed-btn {
+.camera-button {
+  width: 100px;
   position: absolute;
-  bottom: -50px;
+  bottom: -44px;
   left: 38%;
   margin-top: 10px;
   appearance: none;
@@ -644,44 +670,25 @@ video {
   outline: none;
   padding: 5px 20px;
   border-radius: 15px;
-  background-image: linear-gradient(to right, #4A2FBD 50%, #AA367C 50%);
+  background-image: linear-gradient(to right, rgb(11, 121, 117) 50%, #11ECE5 50%);
   background-position: 0%;
   background-size: 200%;
+  background-color: rgb(11, 121, 117);
   color: #fff;
   font-size: 18px;
-  font-family: monospace;
   font-weight: 600;
   transition: 0.4s;
   cursor: pointer;
 }
 
-.cameraFeed-btn2 {
-  position: absolute;
-  bottom: -58px;
-  left: 38%;
-  margin-top: 10px;
-  appearance: none;
-  border: none;
-  outline: none;
-  padding: 5px 20px;
-  border-radius: 15px;
-  background-image: linear-gradient(to right, #4A2FBD 50%, #AA367C 50%);
-  background-position: 0%;
-  background-size: 200%;
-  color: #fff;
-  font-size: 18px;
-  font-weight: 700;
-  transition: 0.4s;
-  cursor: pointer;
-}
 
-.cameraFeed-btn:hover,
-.cameraFeed-btn2:hover {
+.camera-button:hover {
   background-position: 100%;
+  background-color: #11ECE5;
 }
 
 canvas {
-  width: 480px;
+  width: 360px;
   height: 270px;
   border-radius: 15px;
 }
@@ -689,19 +696,19 @@ canvas {
 /*Dashboard Prediction Layout*/
 
 .predictionLayout {
-  width: 800px;
+  width: 660px;
   height: 352px;
   border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  background-color: rgb(249, 249, 249, 0.7);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  background-color: #111111;
   display: flex;
   padding: 20px;
   margin-top: 20px;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 
 .predictionText {
-  height: 100px;
+  height: 270px;
   width: 240px;
   display: flex;
   flex-direction: column;
@@ -714,31 +721,37 @@ canvas {
   width: auto;
 }
 
-.emotion-happy {
+.emotion {
+  font-size: xx-large;
+  text-transform: capitalize;
+  font-weight: bold;
+}
+
+.emotion.emotion-happy {
   color: #FFDD12 !important;
 }
 
-.emotion-sad {
+.emotion.emotion-sad {
   color: #1616FF !important;
 }
 
-.emotion-angry {
+.emotion.emotion-angry {
   color: #FF3939 !important;
 }
 
-.emotion-fear {
-  color: #000 !important;
+.emotion.emotion-fear {
+  color: #fff !important;
 }
 
-.emotion-neutral {
+.emotion.emotion-neutral {
   color: #808080 !important;
 }
 
-.emotion-disgust {
+.emotion.emotion-disgust {
   color: #ADFF02 !important;
 }
 
-.emotion-surprise {
+.emotion.emotion-surprise {
   color: #8F00FF !important;
 }
 
@@ -753,7 +766,7 @@ canvas {
   margin-top: 20px;
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  background-color: rgb(249, 249, 249, 0.7);
+  background-color: #111111;
   text-align: center;
   font-size: xx-large;
   display: flex;
