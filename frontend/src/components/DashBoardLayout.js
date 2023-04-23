@@ -46,7 +46,7 @@ export const DashBoardLayout = () => {
     }
 
     return (
-        <div style={{ display: 'flex', height: '100vh', width: '100vw', color: '#000000', fontFamily: 'monospace', border: 'none' }}>
+        <div className="sidebar-container">
             <Sidebar style={{ height: "100vh", transition: '700', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)' }}>
                 <Menu >
                     <MenuItem
@@ -72,7 +72,7 @@ export const DashBoardLayout = () => {
 
             </Sidebar>
             <main>
-                <h1 style={{ color: '#000000', marginLeft: "4rem", marginTop: "20px" }}>
+                <h1 style={{ marginLeft: "4rem", marginTop: "20px" }}>
                     Sentify Dashboard
                 </h1>
 
