@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CameraFeed } from './CameraFeed';
 
 export const PredictionLayout = ({ hasEmotion }) => {
-    const [emotion, setEmotion] = useState('')
+    const [emotion, setEmotion] = useState('...')
     const [icon, setIcon] = useState('');
     const [emotionClass, setEmotionClass] = useState('');
 
@@ -52,9 +52,9 @@ export const PredictionLayout = ({ hasEmotion }) => {
                 <CameraFeed onPhotoData={handlePhotoData} />
             </div>
             <div className='predictionText'>
-                <h3>You are feeling </h3>
-                <img src={icon} alt="emotion-icon"></img>
-                <p className={emotionClass}>{emotion}</p>
+                <h3>You are feeling</h3>
+                {/* <img src={icon} alt="emotion-icon"></img> */}
+                <p className={'emotion ' + emotionClass}>{emotion}</p>
             </div>
         </div>
     )
