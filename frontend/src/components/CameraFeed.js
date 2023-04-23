@@ -88,6 +88,20 @@ export const CameraFeed = ({ onPhotoData }) => {
         localStorage.clear();
     }
 
+    const [toggleButton, setButton] = useState({
+        action: true,
+        text: "SNAP!"
+    });
+    const handleButtonClick = () => {
+        if (toggleButton.action) {
+            setButton({ ...toggleButton, action: false, text: "NEXT!" });
+            takePhoto();
+        } else {
+            setButton({ ...toggleButton, action: true, text: "SNAP!" });
+            closePhoto();
+        }
+    }
+
     useEffect(() => {
         getVideo();
     }, [videoRef])
@@ -96,12 +110,11 @@ export const CameraFeed = ({ onPhotoData }) => {
         <div className='camera-container'>
             <div className='camera'>
                 <video ref={videoRef}></video>
-                <button className='cameraFeed-btn' onClick={takePhoto}>SNAP!</button>
             </div>
             <div className={'result ' + (hasPhoto ? 'hasPhoto' : '')}>
                 <canvas ref={photoRef}></canvas>
-                <button className="cameraFeed-btn2" onClick={closePhoto}>NEXT!</button>
             </div>
+            <button className="camera-button" onClick={handleButtonClick}>{toggleButton.text}</button>
         </div>
     )
 }
