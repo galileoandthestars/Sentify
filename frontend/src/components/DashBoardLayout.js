@@ -14,8 +14,9 @@ import { useState } from 'react';
 export const DashBoardLayout = () => {
     const { collapseSidebar } = useProSidebar();
     const [state, setState] = useState({
-        emotion: false,
-        songUrl: ''
+        hasEmotion: false,
+        embedInfo: '',
+        emotion: ''
     });
     // const [hasEmotion, setEmotion] = useState(false);
     // const [songURL, setSongURL] = useState("");
@@ -23,9 +24,9 @@ export const DashBoardLayout = () => {
     // let songURL = "";
 
     const setHasEmotion = async (emotion) => {
-        const song_url = await fetchSong(emotion);
-        console.log(song_url);
-        setState({ ...state, songUrl: song_url["song-url"], emotion: true });
+        const embedInfo = await fetchSong(emotion);
+        console.log(embedInfo);
+        setState({ ...state, embedInfo: embedInfo["embed-info"], hasEmotion: true, emotion: emotion });
     }
 
     const fetchSong = async (emotion) => {
@@ -79,13 +80,13 @@ export const DashBoardLayout = () => {
                 <div className='dashboard-container'>
                     <PredictionLayout hasEmotion={setHasEmotion} />
 
-                    {!state.emotion &&
+                    {!state.hasEmotion &&
                         <div className='before-song-player'>
                             <p>Your recommended song will appear here after a picture is taken.</p>
                         </div>
                     }
-                    {state.emotion &&
-                        <SongPlayer songUrl={state.songUrl} />
+                    {state.hasEmotion &&
+                        <SongPlayer embedInfo={[state.embedInfo, state.emotion]} />
                     }
                 </div>
             </main >
