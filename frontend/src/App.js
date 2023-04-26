@@ -3,10 +3,15 @@ import 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Outlet } from "react-router-dom";
 import { Home } from './Pages/Home';
-import { Login } from './Pages/Login';
-import { SignUp } from './Pages/Signup';
+import { toggleScroll } from './components/toggleScroll';
 
 function App() {
+  const { scroll, setScroll } = toggleScroll();
+
+  if (!scroll) {
+    setScroll(false);
+  }
+
   return (
     <div className="App">
       <Home />
