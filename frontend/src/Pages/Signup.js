@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Navbar } from "react-bootstrap";
+import { Navbar, Container } from "react-bootstrap";
+import { toggleScroll } from "../components/toggleScroll";
 
 async function registerUser(credentials) {
     return fetch("/register", {
@@ -22,6 +23,12 @@ export const SignUp = (props) => {
     const [name, setName] = useState('');
     const [confPass, setConfPass] = useState('');
 
+    const { scroll, setScroll } = toggleScroll();
+
+    if (scroll) {
+        setScroll(true);
+    }
+
     const handleSubmit = async e => {
         e.preventDefault();
         const throwaway = await registerUser({
@@ -36,8 +43,26 @@ export const SignUp = (props) => {
     return (
         <div className="register-page">
             <Navbar expand="lg">
-                <Navbar.Brand href=""><Link to="/">Sentify</Link></Navbar.Brand>
+                <Container fluid>
+                    {/* <Link className="link-home-login" to="/">Sentify</Link> */}
+                    <Navbar.Brand><Link className="link-home-login" to="/">Sentify</Link></Navbar.Brand>
+                </Container>
             </Navbar>
+            <div className="register-form-container">
+                <div className="register-form-header">
+                    <span>Register</span>
+                </div>
+                <form className="register-form" onSubmit={handleSubmit}>
+                    <input value={name} className="login-input" name="username" onChange={(e) => setName(e.target.value)} id="name" placeholder="Full Name" />
+                    <input value={email} className="login-input" name="email" onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email" id="email" required />
+                    <input value={pass} className="login-input" name="password" onChange={(e) => setPass(e.target.value)} type="password" placeholder="Password" id="password" required />
+                    <input value={confPass} className="login-input" name="confirmation_password" onChange={(e) => setConfPass(e.target.value)} type="password" placeholder="Confirmation Password" id="confpassword" required />
+                    <button className='submit-button' type="submit">Sign Up</button>
+                    <Link className="link-button" to="/login">Already have an account? Login here.</Link>
+                </form>
+            </div>
+
+            {/* 
             <div className="auth-form-container">
                 <h2>Register</h2>
                 <form className="register-form" onSubmit={handleSubmit}>
@@ -56,9 +81,9 @@ export const SignUp = (props) => {
                     <span className="form-hint">Passwords don't match!</span>
                     <button className='submit-btn' type="submit">Sign Up</button>
                 </form>
-                {/* <button className="link-btn" onClick={() => props.onFormSwitch('login')}>Already have an account? Login here.</button> */}
+                <button className="link-btn" onClick={() => props.onFormSwitch('login')}>Already have an account? Login here.</button>
                 <Link to="/login">Already have an account? Login here.</Link>
-            </div>
+            </div> */}
         </div>
     )
 }
