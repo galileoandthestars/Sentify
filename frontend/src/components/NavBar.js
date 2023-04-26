@@ -43,7 +43,7 @@ export const NavBar = () => {
           </Nav>
           <span className='navbar-text'>
             {/* <button className="login-button" onClick={() => console.log()}><span>Log In</span></button> */}
-            <Link to="/login">Login</Link>
+            <Link className="login-button" to="/login"><span>Login</span></Link>
           </span>
         </Navbar.Collapse>
       </Container>
