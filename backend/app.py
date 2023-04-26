@@ -1,14 +1,18 @@
 import os
+import re
 import jwt
 import cv2
 import base64
+import spotipy
 import numpy as np
 from deepface import DeepFace
 from flask_mysqldb import MySQL
 from hashlib import pbkdf2_hmac
+from pyembed.core import PyEmbed
 from flask_mysqldb import MySQLdb
+from spotipy import SpotifyClientCredentials
 from flask import Flask, Blueprint, request, Response, jsonify
-from settings import MYSQL_DB, MYSQL_PASSWORD, MYSQL_USER, JWT_SECRET_KEY
+from settings import MYSQL_DB, MYSQL_PASSWORD, MYSQL_USER, JWT_SECRET_KEY, CLIENT_ID, CLIENT_SECRET
 
 app = Flask(__name__)
 
@@ -18,6 +22,14 @@ app.config["MYSQL_DB"] = MYSQL_DB
 app.config["MYSQL_CURSORCLASS"] = "DictCursor"
 
 db = MySQL(app)
+
+auth_manager = SpotifyClientCredentials(
+    client_id=CLIENT_ID, client_secret=CLIENT_SECRET
+)
+sp = spotipy.Spotify(auth_manager=auth_manager)
+
+# faceCascade = cv2.CascadeClassifier(
+#     cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 
 
 def validate_user_input(input_type, **kwargs):
@@ -99,18 +111,59 @@ def validate_user(username, password):
 
 
 def fetch_song(emotion):
-    result = db_read(
-        """SELECT s.songId, m.MoodName FROM song s, song_mood sm, mood m WHERE s.songId=sm.songID AND m.MoodId=sm.MoodID"""
-    )
-    songs = [song for song in result if song["MoodName"] == emotion]
-    index = np.random.randint(len(songs) - 1)
-    selectedSong = songs[index]["songId"]
+    # TODO
+    # FETCH USER INFO (LIKED SONGS, FAVORITE GENRES, ...)
+    # REMEMBER TO CALL THE RECOMMENDATION ENDPOINT MULTIPLE TIMES
+    # WITH DIFFERENT SEEDS FOR MORE SONGS
 
-    songURL = db_read(
-        "Select s.songURL from Song s WHERE s.songId = " + str(selectedSong)
+    min_valence, min_arousal = 0, 0
+    max_valence, max_arousal = 1, 1
+    if emotion == "happy":
+        min_valence, min_arousal = 0.5, 0.5
+        # max_valence, max_arousal = 1, 1
+    elif emotion == "sad":
+        # min_valence, min_arousal = 0, 0
+        max_valence, max_arousal = 0.5, 0.5
+    elif emotion == "angry":
+        min_valence, min_arousal = 0, 0.5
+        max_valence, max_arousal = 0.5, 1
+    elif emotion == "neutral":
+        min_valence, min_arousal = 0.5, 0
+        max_valence, max_arousal = 1, 0.5
+
+    recommendations = sp.recommendations(
+        seed_artists=["3nlpTZci9O5W8RsNoNH559"], seed_genres=["classical", "rock"], seed_tracks=["6YwqziI3H71IMishKRTHHg"],
+        min_energy=min_arousal, max_energy=max_arousal,
+        min_valence=min_valence, max_valence=max_valence,
+        limit=1
     )
-    print(songURL)
-    return songURL[0]["songURL"]
+
+    song_ids = [recommendation["id"]
+                for recommendation in recommendations["tracks"]]
+
+    htmls = [PyEmbed().embed("https://open.spotify.com/track/" + song_id)
+             for song_id in song_ids]
+
+    embed_info = {"title": [], "src": []}
+    for html in htmls:
+        embed_info["title"].append(
+            re.search(r"\"(S.*?)\"", html).group(1))
+        embed_info["src"].append(re.search(r"\"(h.*?)\"", html).group(1))
+
+    return embed_info
+
+    # result = db_read(
+    #     """SELECT s.songId, m.MoodName FROM song s, song_mood sm, mood m WHERE s.songId=sm.songID AND m.MoodId=sm.MoodID"""
+    # )
+    # songs = [song for song in result if song["MoodName"] == emotion]
+    # index = np.random.randint(len(songs) - 1)
+    # selectedSong = songs[index]["songId"]
+
+    # songURL = db_read(
+    #     "Select s.songURL from Song s WHERE s.songId = " + str(selectedSong)
+    # )
+    # print(songURL)
+    # return songURL[0]["songURL"]
 
 
 authentication = Blueprint("authentication", __name__)
@@ -171,6 +224,17 @@ def receive_image():
 
     imageData = cv2.imread("./image.png")
 
+    # gray = cv2.cvtColor(imageData, cv2.COLOR_BGR2GRAY)
+    # faces = faceCascade.detectMultiScale(gray, 1.05, 6)
+
+    # count = 0
+    # for (x, y, w, h) in faces:
+    #     face = imageData[y:y + h, x:x + w]  # slice the face from the image
+    #     cv2.imwrite(str(count) + '.png', face)  # save the image
+    #     count += 1
+
+    # imageData = cv2.imread("./0.png")
+
     result = DeepFace.analyze(
         imageData, actions=['emotion'], enforce_detection=False)
 
@@ -181,8 +245,8 @@ def receive_image():
 
 @authentication.route("/recommend-song", methods=['POST'])
 def recommend_song():
-    song_url = fetch_song(request.json.get('emotion'))
-    return jsonify({"song-url": song_url})
+    embed_info = fetch_song(request.json.get('emotion'))
+    return jsonify({"embed-info": embed_info})
 
 
 app.register_blueprint(authentication, url_prefix="/api/auth")
